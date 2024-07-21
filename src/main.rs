@@ -2,7 +2,7 @@ use clap::{Parser};
 use sysinfo::{System, Networks, Disks};
 
 #[derive(Parser)]
-#[clap(version = "1.0", author = "Your Name <youremail@example.com>", about = "Displays system information")]
+#[clap(version = "1.0.0", author = "Ashmit athawait.work@gmail.com", about = "Displays system information")]
 
 struct Cli {
     #[clap(short, long, help = "Show CPU usage")]
@@ -30,9 +30,9 @@ fn main() {
 
     if args.memory {
         println!("\nMemory Usage:");
-        println!("Total: {} KB", system.total_memory());
-        println!("Used: {} KB", system.used_memory());
-        println!("Free: {} KB", system.free_memory());
+        println!("Total: {} GB", system.total_memory() / (1024*1024*1024));
+        println!("Used: {} GB", system.used_memory() / (1024*1024*1024));
+        println!("Free: {} GB", system.free_memory() / (1024*1024*1024));
     }
 
     if args.disk {
@@ -40,7 +40,7 @@ fn main() {
         let disks = Disks::new_with_refreshed_list();
 
         for disk in &disks {
-            println!("{}: {} / {} bytes", disk.name().to_str().unwrap(), disk.available_space(), disk.total_space());
+            println!("{}: {} / {} GB available", disk.name().to_str().unwrap(), disk.available_space() / (1024*1024*1024), disk.total_space() / (1024*1024*1024));
         }
     }
 
@@ -49,7 +49,8 @@ fn main() {
         let networks = Networks::new_with_refreshed_list();
 
         for (interface_name, data) in &networks {
-            println!("{}: received {} bytes, transmitted {} bytes", interface_name, data.total_received(), data.total_transmitted());
+            println!("{}: received {} bytes, transmitted {} bytes", interface_name, data.total_received() , data.total_transmitted());
         }
     }
+    println!("")
 }
