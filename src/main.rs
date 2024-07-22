@@ -3,6 +3,7 @@ use sysinfo::{System, Networks, Disks};
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::Path;
+use colored::*;
 
 #[derive(Parser)]
 #[clap(version = "1.0.0", author = "Ashmit athawait.work@gmail.com", about = "Displays system information")]
@@ -54,21 +55,21 @@ fn main() {
     }
 
     if args.cpu {
-        println!("\nCPU Usage:");
+        println!("\n{}\n", "CPU Usage:".blue().bold().italic());
         for processor in system.cpus() {
-            println!("{}: {} %", processor.name(), processor.cpu_usage());
+            println!("{}: {:.2} %", processor.name(), processor.cpu_usage());
         }
     }
 
     if args.memory {
-        println!("\nMemory Usage:");
+        println!("\n{}\n", "Memory Usage:".cyan().bold().italic());
         println!("Total: {} GB", system.total_memory() / (1024*1024*1024));
         println!("Used: {} GB", system.used_memory() / (1024*1024*1024));
         println!("Free: {} GB", system.free_memory() / (1024*1024*1024));
     }
 
     if args.disk {
-        println!("\nDisk Usage:");
+        println!("\n{}\n", "Disk Usage:".green().bold().italic());
         let disks = Disks::new_with_refreshed_list();
 
         for disk in &disks {
@@ -77,7 +78,7 @@ fn main() {
     }
 
     if args.network {
-        println!("\nNetwork Usage:");
+        println!("\n{}\n", "Network Usage:".yellow().bold().italic());
         let networks = Networks::new_with_refreshed_list();
 
         for (interface_name, data) in &networks {
