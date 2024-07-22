@@ -11,6 +11,8 @@ use colored::*;
 struct Cli {
     #[clap(long, help = "Store your name")]
     name: Option<String>,
+    #[clap(short, long, help = "Show full PC Information")]
+    info: bool,
     #[clap(short, long, help = "Show CPU usage")]
     cpu: bool,
     #[clap(short, long, help = "Show memory usage")]
@@ -27,7 +29,7 @@ struct UserData {
 }
 
 fn main() {
-    let args = Cli::parse();
+    let mut args = Cli::parse();
 
     let mut system = System::new_all();
     system.refresh_all();
@@ -54,22 +56,44 @@ fn main() {
         println!("\nTip - Peekaboo can remember your name for personalised outputs! Just run 'peek --name YOUR_NAME'.");
     }
 
+    if args.info {
+        println!("\n{}\n", "System Information:".red().bold());
+
+        if let Some(sys_name) = System::name() {
+            println!("System Name: {}", sys_name);
+        }
+        if let Some(kernel_version) = System::kernel_version() {
+            println!("System kernel version: {}", kernel_version);
+        }
+        if let Some(os_version) = System::os_version() {
+            println!("System OS version: {}", os_version);
+        }
+        if let Some(host_name) = System::host_name() {
+            println!("System host name: {}", host_name);
+        }
+
+        args.cpu = true;
+        args.memory = true;
+        args.disk = true;
+        args.network = true;
+    }
+
     if args.cpu {
-        println!("\n{}\n", "CPU Usage:".blue().bold().italic());
+        println!("\n{}\n", "CPU Usage:".blue().bold());
         for processor in system.cpus() {
             println!("{}: {:.2} %", processor.name(), processor.cpu_usage());
         }
     }
 
     if args.memory {
-        println!("\n{}\n", "Memory Usage:".cyan().bold().italic());
+        println!("\n{}\n", "Memory Usage:".cyan().bold());
         println!("Total: {} GB", system.total_memory() / (1024*1024*1024));
         println!("Used: {} GB", system.used_memory() / (1024*1024*1024));
         println!("Free: {} GB", system.free_memory() / (1024*1024*1024));
     }
 
     if args.disk {
-        println!("\n{}\n", "Disk Usage:".green().bold().italic());
+        println!("\n{}\n", "Disk Usage:".green().bold());
         let disks = Disks::new_with_refreshed_list();
 
         for disk in &disks {
@@ -78,7 +102,7 @@ fn main() {
     }
 
     if args.network {
-        println!("\n{}\n", "Network Usage:".yellow().bold().italic());
+        println!("\n{}\n", "Network Usage:".yellow().bold());
         let networks = Networks::new_with_refreshed_list();
 
         for (interface_name, data) in &networks {
