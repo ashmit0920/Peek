@@ -4,6 +4,10 @@ use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::Path;
 use colored::*;
+use std::io::{stdout, Write};
+use std::thread::sleep;
+use std::time::Duration;
+use crossterm::{ExecutableCommand, cursor};
 
 #[derive(Parser)]
 #[clap(version = "1.0.0", author = "Ashmit athawait.work@gmail.com", about = "Displays system information")]
@@ -50,8 +54,9 @@ fn main() {
     let file_path = "user_data.json";
     if Path::new(file_path).exists() {
         let data: UserData = serde_json::from_str(&fs::read_to_string(file_path).expect("Unable to read file")).expect("Unable to parse JSON");
-        println!("\n---------- Welcome to Peekaboo! ----------");
-        println!("\nMonitoring {}'s System...", data.name);
+        println!("{} {}{}", "\n---------- Welcome to".bold(), "Peekaboo".bold().cyan(), "! ----------".bold());
+        print!("\nMonitoring {}'s System...\n", data.name);
+        // loading_spinner();
     }
     else {
         println!("\n---------- Welcome to Peekaboo! ----------");
@@ -115,4 +120,27 @@ fn main() {
         }
     }
     println!("")
+}
+
+fn loading_spinner() {
+    let mut stdout = stdout();
+    let spinner = ['|', '/', '-', '\\'];
+    let delay = Duration::from_millis(100);
+
+    for _ in 0..5 {
+        for &symbol in &spinner {
+            // Move the cursor to the beginning of the line
+            stdout.execute(cursor::MoveToColumn(30)).unwrap();
+            // Print the spinner symbol
+            print!("{}", symbol);
+            // Flush the output to ensure the symbol is displayed
+            stdout.flush().unwrap();
+            // Wait for a short duration
+            sleep(delay);
+        }
+    }
+    
+    // Clear the spinner symbol and move to the next line
+    stdout.execute(cursor::MoveToNextLine(1)).unwrap();
+    // println!("Done!");
 }
