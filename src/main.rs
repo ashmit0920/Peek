@@ -11,8 +11,10 @@ use colored::*;
 struct Cli {
     #[clap(long, help = "Store your name")]
     name: Option<String>,
-    #[clap(short, long, help = "Show full PC Information")]
-    info: bool,
+    #[clap(long, help = "Show full PC Information")]
+    showall: bool,
+    #[clap(short, long, help = "Show System Information")]
+    sysinfo: bool,
     #[clap(short, long, help = "Show CPU usage")]
     cpu: bool,
     #[clap(short, long, help = "Show memory usage")]
@@ -56,26 +58,29 @@ fn main() {
         println!("\nTip - Peekaboo can remember your name for personalised outputs! Just run 'peek --name YOUR_NAME'.");
     }
 
-    if args.info {
-        println!("\n{}\n", "System Information:".red().bold());
-
-        if let Some(sys_name) = System::name() {
-            println!("System Name: {}", sys_name);
-        }
-        if let Some(kernel_version) = System::kernel_version() {
-            println!("System kernel version: {}", kernel_version);
-        }
-        if let Some(os_version) = System::os_version() {
-            println!("System OS version: {}", os_version);
-        }
-        if let Some(host_name) = System::host_name() {
-            println!("System host name: {}", host_name);
-        }
-
+    if args.showall {
+        args.sysinfo = true;
         args.cpu = true;
         args.memory = true;
         args.disk = true;
         args.network = true;
+    }
+
+    if args.sysinfo {
+        println!("\n{}\n", "System Information:".red().bold());
+
+        if let Some(sys_name) = System::name() {
+            println!("{}: {}", "System Name".bold(), sys_name);
+        }
+        if let Some(kernel_version) = System::kernel_version() {
+            println!("{}: {}", "System kernel version".bold(), kernel_version);
+        }
+        if let Some(os_version) = System::os_version() {
+            println!("{}: {}", "System OS version".bold(), os_version);
+        }
+        if let Some(host_name) = System::host_name() {
+            println!("{}: {}", "System host name".bold(), host_name);
+        }
     }
 
     if args.cpu {
