@@ -8,6 +8,7 @@ use std::io::{stdout, Write};
 use std::thread::sleep;
 use std::time::Duration;
 use crossterm::{ExecutableCommand, cursor};
+use home::*;
 
 #[derive(Parser)]
 #[clap(version = "1.0.0", author = "Ashmit athawait.work@gmail.com", about = "Displays system information")]
@@ -40,19 +41,26 @@ fn main() {
     let mut system = System::new_all();
     system.refresh_all();
 
+    let home = home::home_dir();
+    let mut file_path = home.as_ref().unwrap().join("Peekaboo");
+    // println!("{}", file_path.display());
+
     if let Some(name) = args.name {
         let user_data = UserData { name };
-        let file_path = "user_data.json";
+        let _ = fs::create_dir(file_path.clone());
+
+        file_path.push("config.json");
 
         // Save the name to a JSON file
         fs::write(file_path, serde_json::to_string(&user_data).unwrap()).expect("Unable to write file");
 
         println!("\nNice to meet you {}!", user_data.name);
+        return
     }
 
     // Display stored name if it exists
-    let file_path = "user_data.json";
-    if Path::new(file_path).exists() {
+    file_path.push("config.json");
+    if Path::new(&file_path).exists() {
         let data: UserData = serde_json::from_str(&fs::read_to_string(file_path).expect("Unable to read file")).expect("Unable to parse JSON");
         println!("{} {}{}", "\n---------- Welcome to".bold(), "Peekaboo".bold().cyan(), "! ----------".bold());
         print!("\nMonitoring {}'s System...\n", data.name);
