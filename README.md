@@ -69,11 +69,18 @@ Peekaboo is a **System Monitoring CLI tool** built in Rust. It allows you to mon
 
 ## Examples
 
-CPU Usage:
+#### CPU Usage:
+
 ![CPU usage](./assets/cpu.png)
 
-Memory and Disk usage:
+#### Memory and Disk usage:
+
 ![Memory and Disk usage](./assets/memory%20and%20disk.png)
 
-Network usage:
+#### Network usage:
+
 ![Network Usage](./assets/network.png)
+
+#### Show all parameters
+
+![Show all](./assets/showall.png)
