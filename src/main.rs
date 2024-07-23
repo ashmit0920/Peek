@@ -62,7 +62,8 @@ fn main() {
     file_path.push("config.json");
     if Path::new(&file_path).exists() {
         let data: UserData = serde_json::from_str(&fs::read_to_string(file_path).expect("Unable to read file")).expect("Unable to parse JSON");
-        println!("{} {}{}", "\n---------- Welcome to".bold(), "Peekaboo".bold().cyan(), "! ----------".bold());
+        print_peekaboo();
+        println!("{} {} {}", "\n----------------- A".bold(), "System Monitoring".bold().yellow(), "CLI Tool -----------------".bold());
         print!("\nMonitoring {}'s System...\n", data.name);
         // loading_spinner();
     }
@@ -151,4 +152,11 @@ fn loading_spinner() {
     // Clear the spinner symbol and move to the next line
     stdout.execute(cursor::MoveToNextLine(1)).unwrap();
     // println!("Done!");
+}
+
+fn print_peekaboo() {
+    let contents = fs::read_to_string("peekaboo.txt")
+        .expect("Unable to read Title banner. Please make sure you have the peekaboo.txt file in the installation directory.");
+
+    println!("\n{}", contents.cyan());
 }
