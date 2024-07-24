@@ -155,8 +155,16 @@ fn loading_spinner() {
 }
 
 fn print_peekaboo() {
-    let contents = fs::read_to_string("peekaboo.txt")
-        .expect("Unable to read Title banner. Please make sure you have the peekaboo.txt file in the installation directory.");
+    // let contents = fs::read_to_string("peekaboo.txt")
+    //     .expect("Unable to read Title banner. Please make sure you have the peekaboo.txt file in the installation directory.");
 
-    println!("\n{}", contents.cyan());
+    // println!("\n{}", contents.cyan());
+
+    let banner = "██████╗ ███████╗███████╗██╗  ██╗ █████╗ ██████╗  ██████╗  ██████╗ \n\
+    ██╔══██╗██╔════╝██╔════╝██║ ██╔╝██╔══██╗██╔══██╗██╔═══██╗██╔═══██╗ \n\
+    ██████╔╝█████╗  █████╗  █████╔╝ ███████║██████╔╝██║   ██║██║   ██║ \n\
+    ██╔═══╝ ██╔══╝  ██╔══╝  ██╔═██╗ ██╔══██║██╔══██╗██║   ██║██║   ██║ \n\
+    ██║     ███████╗███████╗██║  ██╗██║  ██║██████╔╝╚██████╔╝╚██████╔╝ \n\
+    ╚═╝     ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝  ╚═════╝  ╚═════╝ ";
+    println!("\n{}", banner.cyan())
 }
