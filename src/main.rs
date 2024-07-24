@@ -131,6 +131,7 @@ fn main() {
     println!("")
 }
 
+// Not used rn due to cursor position glitches
 fn loading_spinner() {
     let mut stdout = stdout();
     let spinner = ['|', '/', '-', '\\'];
